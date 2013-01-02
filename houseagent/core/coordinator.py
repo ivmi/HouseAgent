@@ -248,6 +248,21 @@ class Coordinator(object):
         
         return self.send_command(plugin_guid, content)
         
+    def send_fire(self, plugin_guid, address, value_id = None):
+        '''
+        Send fire request to device.
+        @param plugin_guid: the guid of the plugin
+        @param address: the address of the device
+        @param value_id: optional id of particular value to change
+        
+        @return: a Twisted deferred which will callback with the result
+        '''
+        content = {'address': address,
+                   'type': 'fire',
+                   'value_id': value_id}
+        
+        return self.send_command(plugin_guid, content)
+        
     def send_dim(self, plugin_guid, address, level, value_id = None):
         '''
         Send dim request to device.

@@ -26,7 +26,7 @@ class Database():
             self.dbpool = ConnectionPool("sqlite3", db_location, check_same_thread=False, cp_max=1)
        
         # Check database schema version and upgrade when required
-        self.updatedb('0.3')
+        self.updatedb('0.4')
              
     def updatedb(self, dbversion):
         '''
@@ -193,6 +193,19 @@ class Database():
                 except: 
                     self.log.error("Database schema upgrade failed (%s)" % sys.exc_info()[1])
 
+            elif version == '0.3':
+                # update DB schema version to '0.4'
+                try:
+                    # update common table
+                    txn.execute("UPDATE common SET parm_value=0.4 WHERE parm='schema_version';")
+
+                    # control_types update
+                    txn.execute("INSERT into control_types VALUES(4, 'CONTROL_TYPE_FIRE');")
+                    
+                    self.log.info("Successfully upgraded database schema to schema version 0.4")
+                except: 
+                    self.log.error("Database schema upgrade failed (%s)" % sys.exc_info()[1])
+
     def query_plugin_auth(self, authcode):
         return self.dbpool.runQuery("SELECT authcode, id from plugins WHERE authcode = '%s'" % authcode)
 
@@ -331,7 +344,13 @@ class Database():
         '''
         This function queries the latest device id.
         '''
-        return self.dbpool.runQuery('select id from devices LIMIT 1')
+        return self.dbpool.runQuery('SELECT id FROM devices ORDER BY id DESC LIMIT 1')
+         
+    def query_latest_value_id(self):
+        '''
+        This function queries the latest value id.
+        '''
+        return self.dbpool.runQuery('SELECT id FROM current_values ORDER BY id DESC LIMIT 1')
          
     def query_triggers(self):
         return self.dbpool.runQuery("SELECT triggers.id, trigger_types.name, triggers.events_id, triggers.conditions " + 
@@ -637,7 +656,7 @@ class Database():
                                     "WHERE current_values.id = ? LIMIT 1", [value_id])
         
     def query_values_by_device_id(self, device_id):
-        return self.dbpool.runQuery("SELECT id, name from current_values WHERE device_id = '%s'" % device_id)
+        return self.dbpool.runQuery("SELECT id, name, label from current_values WHERE device_id = '%s'" % device_id)
 
     def query_device_type_by_device_id(self, device_id):
         return self.dbpool.runQuery("SELECT device_types.name FROM devices " +  

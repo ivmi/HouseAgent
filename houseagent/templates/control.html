@@ -63,6 +63,24 @@ function dim(value_id, statusfield)
         });
 }
     
+function fire(value_id, statusfield)
+{
+        
+        $.ajax({
+            type: "GET",            
+            url: '/values/' + value_id + '?action=fire', 
+            success: function(data) {
+
+                        if (data == 0) {
+                            $('#' + statusfield).html("<font color='red'><b>Request failed!</b></font>");
+                        } else {
+                            $('#' + statusfield).html("Fired");
+                        }
+                        
+                     }
+        });
+}
+
 $(document).ready(function() 
 {
     $('.statspin').spin({
@@ -116,6 +134,8 @@ $(document).ready(function()
 							% elif device[4] == "CONTROL_TYPE_DIMMER":
 								<input value='${device[3]}' id='stat${device[0]}' size=3 type="input" class="dimspin" />
 								<button onclick='javascript:dim("${device[0]}", "status${device[0]}");' class="ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all"><span class="ui-button-text">Set</span></button>
+							% elif device[4] == "CONTROL_TYPE_FIRE":
+								<button onclick='javascript:fire("${device[0]}", "status${device[0]}");' class="ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all"><span class="ui-button-text">Fire</span></button>
 							% endif
 							</td>
 

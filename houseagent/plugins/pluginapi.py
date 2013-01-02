@@ -100,10 +100,9 @@ class PluginAPI(object):
         self.custom_callback = None
         self.poweron_callback = None
         self.poweroff_callback = None
-        self.poweron_v2_callback = None
-        self.poweroff_v2_callback = None
         self.dim_callback = None
         self.thermostat_setpoint_callback = None
+        self.fire_callback = None
         self.crud_callback = None
         
         self.callbacks = []
@@ -122,6 +121,8 @@ class PluginAPI(object):
                 self.thermostat_setpoint_callback = callbacks[callback]
             elif callback == 'dim':
                 self.dim_callback = callbacks[callback]
+            elif callback == 'fire':
+                self.fire_callback = callbacks[callback]
                 
         # Start keep alive
         l = task.LoopingCall(self.heartbeat)
@@ -166,6 +167,13 @@ class PluginAPI(object):
                     self.call_callback(self.thermostat_setpoint_callback, message_id, message['address'], message['temperature'], message['value_id'])
                 else:
                     self.call_callback(self.thermostat_setpoint_callback, message_id, message['address'], message['temperature'])
+
+        elif message['type'] == 'fire':
+            if self.fire_callback:
+                if message.has_key('value_id'):
+                    self.call_callback(self.fire_callback, message_id, message['address'], message['value_id'])
+                else:
+                    self.call_callback(self.fire_callback, message_id, message['address'])
 
     def call_callback(self, function, message_id, *args):
         '''

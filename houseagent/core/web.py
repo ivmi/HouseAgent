@@ -468,6 +468,8 @@ class ValueActionResult(Resource):
             self.coordinator.send_poweron(plugin_guid, self.device_address, self.value_id).addCallback(control_result)
         elif self.action == 'poweroff':
             self.coordinator.send_poweroff(plugin_guid, self.device_address, self.value_id).addCallback(control_result)
+        elif self.action == 'fire':
+            self.coordinator.send_fire(plugin_guid, self.device_address, self.value_id).addCallback(control_result)
         elif self.action == 'dim':
             self.coordinator.send_dim(plugin_guid, self.device_address, self.params["level"], self.value_id).addCallback(control_result)
         elif self.action == 'thermostat_setpoint':
@@ -545,7 +547,7 @@ class Values(HouseAgentREST):
                     device_address = obj.device_address 
                     plugin_id = obj.plugin_id
                     
-                    if action == 'poweron' or action == 'poweroff':   
+                    if action == 'poweron' or action == 'poweroff' or action == 'fire':   
                         return ValueActionResult(plugin_id, device_address, obj.name, self.coordinator, action, {})
                     elif action == 'dim':
                         params = {'level': request.args['level'][0]}
