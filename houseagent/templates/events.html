@@ -84,6 +84,8 @@ $(document).ready(function()
 							         % if a.type == "Device action":
                                         % if a.control_type == "CONTROL_TYPE_ON_OFF":
 							                 Turn device '${a.device}' (${a.control_value_name}) ${a.command}
+							            % elif a.control_type == "CONTROL_TYPE_FIRE":
+							                 Fire device '${a.device}' (${a.control_value_name})
 							            % elif a.control_type == "CONTROL_TYPE_THERMOSTAT":
 							                 Set thermostat setpoint '${a.device}' (${a.control_value_name}) to '${a.command}'
 							            % elif a.control_type == "CONTROL_TYPE_DIMMER":

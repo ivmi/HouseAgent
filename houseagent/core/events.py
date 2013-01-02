@@ -217,6 +217,8 @@ class EventHandler(object):
                     self._coordinator.send_poweron(a.plugin_id, a.address, a.control_value_id)
                 elif a.type == "Device action" and a.control_type == "CONTROL_TYPE_ON_OFF" and int(a.command) == 0:
                     self._coordinator.send_poweroff(a.plugin_id, a.address, a.control_value_id)
+                elif a.type == "Device action" and a.control_type == "CONTROL_TYPE_FIRE":
+                    self._coordinator.send_fire(a.plugin_id, a.address, a.control_value_id)
                 elif a.type == "Device action" and a.control_type == "CONTROL_TYPE_THERMOSTAT":
                     self._coordinator.send_thermostat_setpoint(a.plugin_id, a.address, a.command, a.control_value_id)
                 elif a.type == "Device action" and a.control_type == "CONTROL_TYPE_DIMMER":

@@ -746,6 +746,8 @@ class Event_control_types_by_id(Resource):
             output[0] = "Set thermostat setpoint"
         elif action_type[0][0] == "CONTROL_TYPE_DIMMER":
             output[0] = "Set dim level"
+        elif action_type[0][0] == "CONTROL_TYPE_FIRE":
+            output[0] = "Fire"
         elif action_type[0][0] == "CONTROL_TYPE_ON_OFF":
             output[1] = "Power on"
             output[0] = "Power off"

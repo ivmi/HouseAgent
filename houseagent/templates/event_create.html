@@ -62,6 +62,18 @@ $(document).ready(function()
 	                                                    "command": command.val() } };
 	    }
                                                     
+        /* Fire */
+        if (command.text() == "Fire") { 
+              
+	        $('#action_list tr:last').after('<tr class="Row"><td>Fire device "' + device.text() + 
+	        '" (' + control_value.text() + ')</td></tr>');
+
+	        var action_data = { "action_type" : action_type,
+	                             "parameters"       : { "device" : device.val(),
+	                                                    "control_value" : control_value.val(),
+	                                                    "command": "0" } };
+	    }
+                                                    
         /* Thermostat */
         if (command.text() == "Set thermostat setpoint") {
             var setpoint = $("#thermostat_setpoint").val();
