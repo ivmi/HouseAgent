@@ -94,17 +94,20 @@ class EventHandler(object):
             if action[1] == "Device action":
                 # fetch extra device properties
                 device_properties = yield self.db.query_device_routing_by_id(a.device)
-                a.address = device_properties[0][0]
-                a.plugin_id = device_properties[0][1]
+                if len(device_properties) > 0:
+                    a.address = device_properties[0][0]
+                    a.plugin_id = device_properties[0][1]
                 
                 # fetch value properties
                 value_properties = yield self.db.query_value_properties(a.control_value)
-                a.control_value_id = value_properties[0][0]
-                a.control_value_name = value_properties[0][3]
+                if len(value_properties) > 0:
+                    a.control_value_id = value_properties[0][0]
+                    a.control_value_name = value_properties[0][3]
                 
                 # fetch control_type
                 control_type = yield self.db.query_controltypename(a.control_value)
-                a.control_type = control_type[0][0]
+                if len(control_type) > 0:
+                    a.control_type = control_type[0][0]
             
             self._actions.append(a)
         

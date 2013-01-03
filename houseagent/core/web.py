@@ -1089,9 +1089,9 @@ class Events(Resource):
                     
             if t.type == "Device value change":
                 extra = yield self.db.query_extra_valueinfo(t.current_value_id)
-                
-                t.device = extra[0][0]
-                t.value = extra[0][1]
+                if len(extra) > 0:
+                    t.device = extra[0][0]
+                    t.value = extra[0][1]
                                     
             triggers.append(t)
             
@@ -1116,9 +1116,9 @@ class Events(Resource):
 
             if c.type == "Device value":
                 extra = yield self.db.query_extra_valueinfo(c.current_values_id)
-                
-                c.device = extra[0][0]
-                c.value = extra[0][1]                
+                if len(extra) > 0:
+                    c.device = extra[0][0]
+                    c.value = extra[0][1]                
 
             conditions_out.append(c)  
             
@@ -1132,11 +1132,13 @@ class Events(Resource):
             for param in action_parameters:
                 if param[0] == "device":
                     device = yield self.db.query_device(param[1])
-                    a.device = device[0][1]
+                    if len(device) > 0:
+                        a.device = device[0][1]
                 elif param[0] == "control_value":
                     extra = yield self.db.query_extra_valueinfo(param[1])
                     a.control_value = param[1]
-                    a.control_value_name = extra[0][1]
+                    if len(extra) > 0:
+                        a.control_value_name = extra[0][1]
                 elif param[0] == "command":
                     if param[1] == "1": a.command = "on"
                     elif param[1] == "0": a.command = "off"
@@ -1146,8 +1148,9 @@ class Events(Resource):
             if action[1] == "Device action":               
                 # fetch control_type
                 control_type = yield self.db.query_controltypename(a.control_value)
-                print "Control type" + str(control_type)
-                a.control_type = control_type[0][0]
+                if len(control_type) > 0:
+                    print "Control type" + str(control_type)
+                    a.control_type = control_type[0][0]
             
             actions.append(a)      
 
