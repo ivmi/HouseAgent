@@ -162,10 +162,10 @@ class EventHandler(object):
                 matching = True
                 
                 if t.condition == "eq":
-                    if value != t.condition_value:
+                    if str(value) != str(t.condition_value):
                         matching = False
                 elif t.condition == "ne":
-                    if value == t.condition_value:
+                    if str(value) == str(t.condition_value):
                         matching = False
                 elif t.condition == "gt":
                     if float(value) < float(t.condition_value):
