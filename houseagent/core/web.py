@@ -818,14 +818,52 @@ class Event_save(Resource):
        
         self.request = request
         event_info = json.loads(request.content.read())
-            
+
+        print "event_info", event_info
+        
+        try:
+            if int(event_info["trigger"]["trigger_type"]) == 2:
+                int(event_info["trigger"]["parameters"]["condition_value"])
+                int(event_info["trigger"]["parameters"]["current_value_id"])
+                ["eq", "ne", "lt", "gt"].index(str(event_info["trigger"]["parameters"]["condition"]))
+        except:
+            msg =  "Error: trigger information incomplete"
+            print msg
+            d = defer.Deferred()
+            d.callback(msg)
+            return d
+
+        try:
+            for x in event_info["conditions"]:
+                int(x["condition_type"])
+                int(x["parameters"]["condition_value"])
+                int(x["parameters"]["current_values_id"])
+                ["eq", "ne", "lt", "gt"].index(str(x["parameters"]["condition"]))
+        except:
+            msg =  "Error: condition information incomplete"
+            print msg
+            d = defer.Deferred()
+            d.callback(msg)
+            return d
+        
+        try:
+            for x in event_info["actions"]:
+                if x is not None:
+                    int(x["action_type"])
+                    int(x["parameters"]["device"])
+                    int(x["parameters"]["control_value"])
+        except:
+            msg =  "Error: action information incomplete"
+            print msg
+            d = defer.Deferred()
+            d.callback(msg)
+            return d
+        
         if event_info['enabled'] == "yes": 
             enabled = True
         else:
             enabled = False
             
-        print "event_info", event_info
-
         self.db.add_event2(event_info["name"], enabled, event_info["conditions"], event_info["actions"], event_info["trigger"]).addCallback(self.finished)
         
         return NOT_DONE_YET
