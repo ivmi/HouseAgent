@@ -168,10 +168,10 @@ class EventHandler(object):
                     if str(value) == str(t.condition_value):
                         matching = False
                 elif t.condition == "gt":
-                    if float(value) < float(t.condition_value):
+                    if float(value) <= float(t.condition_value):
                         matching = False
                 elif t.condition == "lt":
-                    if float(value) > float(t.condition_value):
+                    if float(value) >= float(t.condition_value):
                         matching = False       
                         
                 if matching:
