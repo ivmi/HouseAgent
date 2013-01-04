@@ -823,7 +823,6 @@ class Event_save(Resource):
         
         try:
             if int(event_info["trigger"]["trigger_type"]) == 2:
-                int(event_info["trigger"]["parameters"]["condition_value"])
                 int(event_info["trigger"]["parameters"]["current_value_id"])
                 ["eq", "ne", "lt", "gt"].index(str(event_info["trigger"]["parameters"]["condition"]))
         except:
@@ -836,7 +835,6 @@ class Event_save(Resource):
         try:
             for x in event_info["conditions"]:
                 int(x["condition_type"])
-                int(x["parameters"]["condition_value"])
                 int(x["parameters"]["current_values_id"])
                 ["eq", "ne", "lt", "gt"].index(str(x["parameters"]["condition"]))
         except:
