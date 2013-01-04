@@ -7,15 +7,16 @@
 <script>
 $(document).ready(function() 
 {
-	var stored_triggers = []
 	var stored_actions = []
 	var stored_conditions = []
 	
 	// Initialize UI elements
 	$( "#tabs" ).tabs();
-	$("#add_condition").button();
 	$("#save_event").button();
+	$("#add_condition").button();
 	$("#add_action").button();
+	$("#clear_conditions").button();
+	$("#clear_actions").button();
 	$('#timepicker').jtimepicker({
 	   secView : false,
 	   minInterval : 1
@@ -26,23 +27,19 @@ $(document).ready(function()
     $(".condition_device").hide();
     $("#conditions").hide();
     $("#add_condition").hide();
-    	
-	$("#add_trigger").click(function() {
-		var trigger_type = $("#triggertype option:selected");
-		if (trigger_type.text() == "Device value change") {
-			addValueChangeTrigger();
-		} else if (trigger_type.text() == "Absolute time") {
-		  addAbsoluteTimeTrigger();
-		}
+
+	$("#clear_actions").click(function() {
+		stored_actions = []
+		$('#action_list tr').slice(2).remove()
 	});
 	
 	$("#add_action").click(function() {
-	   var action_type = $("#actiontype option:selected");
-	   if (action_type.text() == "Device action") {
-	       addDeviceAction();
-	   }
-	});
-	
+		   var action_type = $("#actiontype option:selected");
+		   if (action_type.text() == "Device action") {
+		       addDeviceAction();
+		   }
+		});
+		
     function addDeviceAction() {
         var action_type = $("#actiontype option:selected").val();
         var device = $("#act_devices option:selected");
@@ -360,6 +357,11 @@ $(document).ready(function()
          });
     });
     
+	$("#clear_conditions").click(function() {
+		stored_conditions = []
+		$('#condition_list tr').slice(2).remove()
+	});
+	
     $("#add_condition").click(function() {
         var condition_type = $("#condition_type option:selected");
         
@@ -640,6 +642,16 @@ $(document).ready(function()
 								</tr>
 							</tbody>
 						</table>												
+                        <table class="PanelPlain" cellspacing="0" cellpadding="0" border="0" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td class="Label">&nbsp;</td>
+                                    <td height="30" valign="top">
+                                        <button id="clear_conditions">Clear conditions</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
 					</div>
 					<div id="actions">
                         <form name="actions_add">
@@ -733,6 +745,16 @@ $(document).ready(function()
                                 </tr>
                             </tbody>
                         </table>                                                
+                        <table class="PanelPlain" cellspacing="0" cellpadding="0" border="0" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td class="Label">&nbsp;</td>
+                                    <td height="30" valign="top">
+                                        <button id="clear_actions">Clear actions</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
 					</div>
 				</div>
 			</td>
